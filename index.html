@@ -3,168 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wareligent News | Digital Knowledge & Community Portal</title>
+    <title>Wareligent News | Wikipedia Style Light Portal</title>
     
-    <!-- Meta Tags for Global SEO -->
-    <meta name="description" content="Wareligent News - Global breaking news, tech insights, and community updates.">
-    <meta name="keywords" content="Wareligent News, Tech News, Global News, User Generated Content">
+    <!-- Meta Tags -->
+    <meta name="description" content="Wareligent News - Clean & Light Knowledge Portal">
     <meta name="author" content="Wareligent Community">
-    
-    <!-- Open Graph Tags -->
-    <meta property="og:title" content="Wareligent News Portal">
-    <meta property="og:description" content="Read and share unbiased global community news.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://news-wareligent.vercel.app">
 
     <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Sansita+One&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-dark: #090d16;
-            --card-bg: rgba(17, 24, 39, 0.7);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --accent-purple: #a855f7;
-            --accent-purple-hover: #9333ea;
-            --accent-red: #ef4444;
-            --accent-green: #22c55e;
+            --bg-light: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #a2a9b1;
+            --border-light: #eaecf0;
+            --text-main: #202122;
+            --text-muted: #54595d;
+            --wiki-blue: #36c;
+            --wiki-blue-hover: #447ff5;
+            --accent-red: #d33;
+            --accent-green: #00af89;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            background-color: var(--bg-dark); 
+            background-color: var(--bg-light); 
             color: var(--text-main); 
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.6; 
         }
 
-        /* Fixed Navigation Header */
+        /* Wikipedia-style Clean Header */
         nav {
             display: flex; 
             justify-content: space-between; 
             align-items: center;
-            padding: 14px 20px; 
-            background: rgba(9, 13, 22, 0.9);
+            padding: 12px 24px; 
+            background: #ffffff;
             border-bottom: 1px solid var(--border-color); 
-            backdrop-filter: blur(12px);
             position: sticky; 
             top: 0; 
             z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         .logo { 
-            font-size: 1.1rem; 
-            font-weight: 800; 
-            color: #fff; 
+            font-size: 1.25rem; 
+            font-weight: 700; 
+            color: var(--text-main); 
             text-decoration: none; 
             display: flex; 
             align-items: center; 
-            gap: 8px; 
+            gap: 10px; 
             white-space: nowrap;
         }
-        .logo span { color: var(--accent-purple); }
+        .logo span { color: var(--wiki-blue); font-weight: 800; }
         .btn-post {
-            background: var(--accent-purple); 
-            color: #fff; 
+            background: var(--wiki-blue); 
+            color: #ffffff; 
             text-decoration: none;
             padding: 8px 16px;
-            border-radius: 8px; 
-            font-size: 0.85rem;
+            border-radius: 4px; 
+            font-size: 0.88rem;
             font-weight: 600; 
             display: flex;
             align-items: center;
             gap: 6px;
             white-space: nowrap;
-            transition: all 0.2s ease;
+            transition: background 0.2s ease;
         }
-        .btn-post:hover { background: var(--accent-purple-hover); transform: translateY(-1px); }
+        .btn-post:hover { background: var(--wiki-blue-hover); }
 
-        /* Container & Modern Feed */
-        .container { max-width: 760px; margin: 25px auto; padding: 0 16px; }
+        /* Container & Article Style */
+        .container { max-width: 800px; margin: 30px auto; padding: 0 16px; }
 
         .news-card {
             background: var(--card-bg); 
-            border: 1px solid var(--border-color);
-            border-radius: 14px; 
-            padding: 20px; 
-            margin-bottom: 20px; 
-            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-light);
+            border-radius: 8px; 
+            padding: 24px; 
+            margin-bottom: 24px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         .news-header { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
             margin-bottom: 12px; 
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 8px;
         }
-        .author-info strong { color: #e5e7eb; }
+        .author-info strong { color: var(--text-main); }
         .views-count { 
-            background: rgba(168, 85, 247, 0.1); 
-            color: var(--accent-purple); 
-            padding: 2px 8px; 
+            background: #f1f3f5; 
+            color: var(--wiki-blue); 
+            padding: 2px 10px; 
             border-radius: 12px;
+            font-size: 0.8rem;
             font-weight: 600; 
         }
         .news-title { 
-            font-size: 1.35rem; 
+            font-size: 1.5rem; 
             font-weight: 700; 
-            margin-bottom: 12px; 
-            color: #ffffff; 
-            line-height: 1.4;
+            margin-bottom: 14px; 
+            color: #000000; 
+            line-height: 1.3;
+            font-family: 'Georgia', serif;
         }
         .news-content { 
-            color: #d1d5db; 
-            font-family: 'Merriweather', serif; /* Wikipedia Reader Experience */
-            font-size: 0.95rem; 
-            line-height: 1.7;
-            margin-bottom: 18px; 
+            color: #202122; 
+            font-family: 'Merriweather', serif; 
+            font-size: 1rem; 
+            line-height: 1.75;
+            margin-bottom: 20px; 
         }
 
         /* Action Buttons */
         .news-actions {
             display: flex; 
-            gap: 16px; 
-            border-top: 1px solid var(--border-color);
-            padding-top: 12px; 
+            gap: 20px; 
+            border-top: 1px solid var(--border-light);
+            padding-top: 14px; 
             align-items: center;
         }
         .action-btn {
             background: transparent; 
             border: none; 
             color: var(--text-muted);
-            font-size: 0.85rem; 
+            font-size: 0.9rem; 
             cursor: pointer; 
             display: flex; 
             align-items: center; 
             gap: 6px; 
-            transition: 0.2s;
+            transition: color 0.2s;
         }
-        .action-btn:hover { color: #fff; }
+        .action-btn:hover { color: var(--wiki-blue); }
         .action-btn.like:hover { color: var(--accent-green); }
         .action-btn.dislike:hover { color: var(--accent-red); }
-        .action-btn.report { margin-left: auto; color: #6b7280; font-size: 0.8rem; }
+        .action-btn.report { margin-left: auto; color: #888; font-size: 0.8rem; }
         .action-btn.report:hover { color: var(--accent-red); }
 
-        /* Small screens optimization */
+        /* Responsive Layout */
         @media (max-width: 480px) {
-            nav { padding: 12px 14px; }
-            .logo { font-size: 1rem; }
+            nav { padding: 10px 14px; }
+            .logo { font-size: 1.1rem; }
             .btn-post { padding: 6px 12px; font-size: 0.8rem; }
             .news-card { padding: 16px; }
-            .news-title { font-size: 1.15rem; }
-            .news-content { font-size: 0.9rem; }
+            .news-title { font-size: 1.25rem; }
+            .news-content { font-size: 0.95rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Header Navigation -->
+    <!-- Light Wikipedia Style Header -->
     <nav>
-        <a href="index.html" class="logo"><i class="fa-solid fa-newspaper"></i> Wareligent <span>News</span></a>
-        <a href="publish.html" class="btn-post"><i class="fa-solid fa-plus"></i> Submit News</a>
+        <a href="index.html" class="logo"><i class="fa-solid fa-book-open"></i> Wareligent <span>News</span></a>
+        <a href="publish.html" class="btn-post"><i class="fa-solid fa-plus"></i> Submit Article</a>
     </nav>
 
     <!-- Main Content Feed -->
