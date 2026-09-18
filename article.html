@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Dynamic SEO Placeholder Tags -->
+    <title id="seoTitle">Wareligent Article</title>
+    <meta name="description" id="seoDesc" content="Read the latest tech news and updates on Wareligent.">
+    <meta name="keywords" id="seoKeywords" content="tech, news, wareligent">
+
+    <!-- Open Graph (Facebook / LinkedIn / Twitter Previews) -->
+    <meta property="og:title" id="ogTitle" content="Wareligent">
+    <meta property="og:description" id="ogDesc" content="Tech News and Updates">
+    <meta property="og:image" id="ogImage" content="">
+    <meta property="og:type" content="article">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --accent: #f97316;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text-main); line-height: 1.7; padding: 40px 15px; }
+
+        .article-container { max-width: 800px; margin: 0 auto; }
+        
+        .article-title { font-size: 2.2rem; font-weight: 700; margin-bottom: 12px; line-height: 1.25; }
+        .meta { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px; display: flex; gap: 15px; align-items: center; }
+        
+        /* Tags Chips UI */
+        .tags-wrapper { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+        .tag-chip { background: #f1f5f9; color: var(--text-muted); padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 500; text-transform: lowercase; }
+
+        /* Multi-Image Gallery */
+        .gallery { display: flex; flex-direction: column; gap: 16px; margin-bottom: 28px; }
+        .gallery img { width: 100%; max-height: 480px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border); }
+
+        .content { font-size: 1.1rem; color: #334155; white-space: pre-line; }
+
+        .back-btn { display: inline-block; margin-bottom: 20px; color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <div class="article-container">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+        
+        <h1 class="article-title" id="articleTitle">Loading title...</h1>
+        
+        <div class="meta">
+            <span id="articleAuthor">By Wareligent</span> • 
+            <span id="articleDate">Date</span>
+        </div>
+
+        <div class="tags-wrapper" id="tagsContainer"></div>
+
+        <div class="gallery" id="imageGallery"></div>
+
+        <div class="content" id="articleContent">Loading article content...</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://xveccsbdrysuiwyuvodw.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_HkyRE170ylT0kkdZxbwUSQ_ihHrS_Ra';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const articleId = urlParams.get('id');
+
+        async function fetchArticle() {
+            if (!articleId) {
+                document.getElementById('articleTitle').innerText = "Article not found!";
+                return;
+            }
+
+            const { data: article, error } = await supabaseClient
+                .from('articles')
+                .select('*')
+                .eq('id', articleId)
+                .single();
+
+            if (error || !article) {
+                document.getElementById('articleTitle').innerText = "Article not found!";
+                return;
+            }
+
+            // Set Content on Page
+            document.getElementById('articleTitle').innerText = article.title;
+            document.getElementById('articleAuthor').innerText = `By ${article.author || 'Wareligent'}`;
+            document.getElementById('articleDate').innerText = new Date(article.created_at).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'short', day: 'numeric'
+            });
+            document.getElementById('articleContent').innerText = article.content;
+
+            // Set Dynamic SEO Meta Tags
+            document.title = `${article.title} | Wareligent`;
+            document.getElementById('seoTitle').innerText = article.title;
+            document.getElementById('seoDesc').setAttribute('content', article.content.substring(0, 160) + '...');
+            document.getElementById('ogTitle').setAttribute('content', article.title);
+            document.getElementById('ogDesc').setAttribute('content', article.content.substring(0, 160) + '...');
+
+            if (article.tags) {
+                document.getElementById('seoKeywords').setAttribute('content', article.tags);
+                
+                // Display Tags in UI
+                const tagsArr = article.tags.split(',');
+                const tagsContainer = document.getElementById('tagsContainer');
+                tagsArr.forEach(tag => {
+                    if (tag.trim() !== '') {
+                        const chip = document.createElement('span');
+                        chip.className = 'tag-chip';
+                        chip.innerText = `#${tag.trim()}`;
+                        tagsContainer.appendChild(chip);
+                    }
+                });
+            }
+
+            // Render Images Gallery
+            const gallery = document.getElementById('imageGallery');
+            if (article.image_url) {
+                const images = article.image_url.split(',');
+                document.getElementById('ogImage').setAttribute('content', images[0]); // Set 1st image for social previews
+                
+                images.forEach((url, index) => {
+                    const img = document.createElement('img');
+                    img.src = url.trim();
+                    img.alt = `${article.title} image ${index + 1}`;
+                    gallery.appendChild(img);
+                });
+            }
+        }
+
+        fetchArticle();
+    </script>
+</body>
+</html>
