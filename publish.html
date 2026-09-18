@@ -1,1 +1,76 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard & Publish | Wareligent News</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #030712; --card: rgba(17, 24, 39, 0.8); --border: rgba(255,255,255,0.08); --accent: #a855f7; --green: #22c55e; }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg); color: #fff; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; text-align: center; }
+        .stat-card h3 { font-size: 1.8rem; color: var(--accent); }
+        .section-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 25px; margin-bottom: 30px; }
+        h2 { font-size: 1.2rem; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        input, textarea, select { width: 100%; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 10px; color: #fff; margin-bottom: 15px; outline: none; }
+        button { background: var(--accent); color: #fff; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 700; cursor: pointer; width: 100%; }
+        button.withdraw { background: var(--green); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fa-solid fa-newspaper"></i> Creator Dashboard</h1>
+            <a href="index.html" style="color:var(--accent); text-decoration:none;"><i class="fa-solid fa-arrow-left"></i> Home</a>
+        </div>
 
+        <!-- Earnings & Views Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3 id="totalViews">12,450</h3>
+                <p>Total News Views</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="totalEarnings">$12.45</h3>
+                <p>Total Earnings</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="pendingWithdraw">$0.00</h3>
+                <p>Pending Payout</p>
+            </div>
+        </div>
+
+        <!-- Publish News Form -->
+        <div class="section-box">
+            <h2><i class="fa-solid fa-pen-to-square"></i> Publish New Article</h2>
+            <form id="newsForm" onsubmit="event.preventDefault(); alert('নিউজ সফলভাবে জমা দেওয়া হয়েছে!');">
+                <input type="text" placeholder="নিউজের শিরোনাম (Title)" required>
+                <input type="text" placeholder="ছবি ইউআরএল (Image URL)" required>
+                <textarea rows="6" placeholder="নিউজের বিস্তারিত কনটেন্ট লিখুন..." required></textarea>
+                <button type="submit"><i class="fa-solid fa-paper-plane"></i> Submit News Article</button>
+            </form>
+        </div>
+
+        <!-- Withdraw Earnings Form -->
+        <div class="section-box">
+            <h2><i class="fa-solid fa-wallet"></i> Earnings & Withdrawal</h2>
+            <form id="withdrawForm" onsubmit="event.preventDefault(); alert('উইথড্র রিকোয়েস্ট অ্যাডমিনের কাছে পাঠানো হয়েছে!');">
+                <select required>
+                    <option value="">পেমেন্ট মেথড সিলেক্ট করুন</option>
+                    <option value="bkash">bKash</option>
+                    <option value="nagad">Nagad</option>
+                    <option value="binance">Binance (USDT)</option>
+                </select>
+                <input type="text" placeholder="মোবাইল নম্বর / ওয়ালেট এড্রেস" required>
+                <input type="number" placeholder="উইথড্র পরিমাণ ($)" min="5" required>
+                <button type="submit" class="withdraw"><i class="fa-solid fa-money-bill-transfer"></i> Request Payout</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
