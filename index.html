@@ -1,152 +1,179 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wareligent News | Community Driven Intelligence Portal</title>
+    <title>Wareligent News | Digital Knowledge & Community Portal</title>
     
-    <!-- Dynamic SEO & Social Sharing Meta Tags -->
-    <meta name="description" content="Wareligent News - বিশ্বের সর্বশেষ খবর, প্রযুক্তি ও কমিউনিটি আপডেট।">
-    <meta name="keywords" content="Wareligent News, Tech News, User Generated News, Breaking News">
+    <!-- Meta Tags for Global SEO -->
+    <meta name="description" content="Wareligent News - Global breaking news, tech insights, and community updates.">
+    <meta name="keywords" content="Wareligent News, Tech News, Global News, User Generated Content">
     <meta name="author" content="Wareligent Community">
     
-    <!-- Open Graph (OG) Meta Tags for Google & Social Media -->
+    <!-- Open Graph Tags -->
     <meta property="og:title" content="Wareligent News Portal">
-    <meta property="og:description" content="পড়ুন এবং শেয়ার করুন নিরপেক্ষ কমিউনিটি সংবাদ।">
+    <meta property="og:description" content="Read and share unbiased global community news.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://news-wareligent.vercel.app">
-    <meta property="og:image" content="https://wareligent.vercel.app/favicon.ico">
 
-    <!-- NewsArticle Schema for Google News Indexing -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "NewsArticle",
-      "headline": "Wareligent News Portal Launch",
-      "image": ["https://wareligent.vercel.app/favicon.ico"],
-      "datePublished": "2026-09-18T00:00:00+06:00",
-      "author": {
-        "@type": "Organization",
-        "name": "Wareligent Community"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "Wareligent",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://wareligent.vercel.app/favicon.ico"
-        }
-      }
-    }
-    </script>
-
-    <!-- Icons & Fonts -->
+    <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-dark: #030712;
+            --bg-dark: #090d16;
             --card-bg: rgba(17, 24, 39, 0.7);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --text-main: #f9fafb;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-main: #f3f4f6;
             --text-muted: #9ca3af;
             --accent-purple: #a855f7;
+            --accent-purple-hover: #9333ea;
             --accent-red: #ef4444;
             --accent-green: #22c55e;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: var(--bg-dark); color: var(--text-main); line-height: 1.6; }
-
-        /* Navbar */
-        nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 8%; background: rgba(3, 7, 18, 0.8);
-            border-bottom: 1px solid var(--border-color); backdrop-filter: blur(12px);
-            position: sticky; top: 0; z-index: 100;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--text-main); 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.6; 
         }
-        .logo { font-size: 1.3rem; font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+
+        /* Fixed Navigation Header */
+        nav {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 14px 20px; 
+            background: rgba(9, 13, 22, 0.9);
+            border-bottom: 1px solid var(--border-color); 
+            backdrop-filter: blur(12px);
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+        }
+        .logo { 
+            font-size: 1.1rem; 
+            font-weight: 800; 
+            color: #fff; 
+            text-decoration: none; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            white-space: nowrap;
+        }
         .logo span { color: var(--accent-purple); }
         .btn-post {
-            background: var(--accent-purple); color: #fff; border: none; padding: 8px 18px;
-            border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.3s;
+            background: var(--accent-purple); 
+            color: #fff; 
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px; 
+            font-size: 0.85rem;
+            font-weight: 600; 
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            transition: all 0.2s ease;
         }
-        .btn-post:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-post:hover { background: var(--accent-purple-hover); transform: translateY(-1px); }
 
-        /* Main Layout */
-        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+        /* Container & Modern Feed */
+        .container { max-width: 760px; margin: 25px auto; padding: 0 16px; }
 
-        /* News Card */
         .news-card {
-            background: var(--card-bg); border: 1px solid var(--border-color);
-            border-radius: 16px; padding: 24px; margin-bottom: 25px; backdrop-filter: blur(10px);
+            background: var(--card-bg); 
+            border: 1px solid var(--border-color);
+            border-radius: 14px; 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            backdrop-filter: blur(8px);
         }
-        .news-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .author-info { font-size: 0.85rem; color: var(--text-muted); }
-        .views-count { font-size: 0.8rem; color: var(--accent-purple); font-weight: 600; }
-        .news-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 10px; color: #fff; }
-        .news-content { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 15px; }
+        .news-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 12px; 
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .author-info strong { color: #e5e7eb; }
+        .views-count { 
+            background: rgba(168, 85, 247, 0.1); 
+            color: var(--accent-purple); 
+            padding: 2px 8px; 
+            border-radius: 12px;
+            font-weight: 600; 
+        }
+        .news-title { 
+            font-size: 1.35rem; 
+            font-weight: 700; 
+            margin-bottom: 12px; 
+            color: #ffffff; 
+            line-height: 1.4;
+        }
+        .news-content { 
+            color: #d1d5db; 
+            font-family: 'Merriweather', serif; /* Wikipedia Reader Experience */
+            font-size: 0.95rem; 
+            line-height: 1.7;
+            margin-bottom: 18px; 
+        }
 
-        /* Actions Footer */
+        /* Action Buttons */
         .news-actions {
-            display: flex; gap: 20px; border-top: 1px solid var(--border-color);
-            padding-top: 15px; align-items: center;
+            display: flex; 
+            gap: 16px; 
+            border-top: 1px solid var(--border-color);
+            padding-top: 12px; 
+            align-items: center;
         }
         .action-btn {
-            background: transparent; border: none; color: var(--text-muted);
-            font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s;
+            background: transparent; 
+            border: none; 
+            color: var(--text-muted);
+            font-size: 0.85rem; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            transition: 0.2s;
         }
         .action-btn:hover { color: #fff; }
         .action-btn.like:hover { color: var(--accent-green); }
         .action-btn.dislike:hover { color: var(--accent-red); }
-        .action-btn.report { margin-left: auto; color: #6b7280; }
+        .action-btn.report { margin-left: auto; color: #6b7280; font-size: 0.8rem; }
         .action-btn.report:hover { color: var(--accent-red); }
 
-        /* Comments Section Preview */
-        .comment-box { margin-top: 15px; display: flex; gap: 10px; }
-        .comment-input {
-            flex: 1; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border-color);
-            padding: 8px 14px; border-radius: 10px; color: #fff; outline: none; font-size: 0.85rem;
+        /* Small screens optimization */
+        @media (max-width: 480px) {
+            nav { padding: 12px 14px; }
+            .logo { font-size: 1rem; }
+            .btn-post { padding: 6px 12px; font-size: 0.8rem; }
+            .news-card { padding: 16px; }
+            .news-title { font-size: 1.15rem; }
+            .news-content { font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
+    <!-- Header Navigation -->
     <nav>
-        <a href="#" class="logo"><i class="fa-solid fa-newspaper"></i> Wareligent <span>News</span></a>
-        <button class="btn-post" onclick="alert('পোস্ট তৈরি করার মডাল শীঘ্রই যুক্ত করা হচ্ছে!')"><i class="fa-solid fa-plus"></i> Submit News</button>
+        <a href="index.html" class="logo"><i class="fa-solid fa-newspaper"></i> Wareligent <span>News</span></a>
+        <a href="publish.html" class="btn-post"><i class="fa-solid fa-plus"></i> Submit News</a>
     </nav>
 
-    <!-- Content Container -->
-    <div class="container">
-
-        <!-- Demo Article Card -->
-        <article class="news-card">
-            <div class="news-header">
-                <div class="author-info"><i class="fa-solid fa-user"></i> Posted by <strong>Baijid</strong> • 2 hours ago</div>
-                <div class="views-count"><i class="fa-solid fa-eye"></i> 1,240 Views</div>
-            </div>
-
-            <h2 class="news-title">Wareligent Ecosystem Expansion: News Portal Unveiled</h2>
-            <p class="news-content">
-                আমরা আনন্দিত যে Wareligent সার্চ ইঞ্জিনের পাশাপাশি এখন চালু হচ্ছে কমিউনিটি নিউজ পোর্টাল। ব্যবহারকারীরা এখন সরাসরি নিরপেক্ষ খবর আপলোড করতে পারবেন এবং ইন্টারঅ্যাক্ট করতে পারবেন...
-            </p>
-
-            <div class="news-actions">
-                <button class="action-btn like"><i class="fa-solid fa-thumbs-up"></i> <span>142</span></button>
-                <button class="action-btn dislike"><i class="fa-solid fa-thumbs-down"></i> <span>3</span></button>
-                <button class="action-btn"><i class="fa-solid fa-comment"></i> <span>18 Comments</span></button>
-                <button class="action-btn report" title="Report Post"><i class="fa-solid fa-flag"></i> Report</button>
-            </div>
-
-            <div class="comment-box">
-                <input type="text" class="comment-input" placeholder="মতামত লিখুন...">
-            </div>
-        </article>
-
+    <!-- Main Content Feed -->
+    <div class="container" id="news-feed">
+        <!-- Dynamic Articles will load here via script.js -->
     </div>
 
+    <!-- Supabase SDK & Main JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
 </body>
-                                                     </html>
+</html>
