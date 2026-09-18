@@ -22,18 +22,31 @@ async function loadArticles() {
         return;
     }
 
-    feedContainer.innerHTML = articles.map(item => `
-        <div class="news-card">
-            ${item.image_url ? `<img src="${item.image_url}" alt="News Image">` : ''}
-            <div class="news-card-content">
-                <h3>${item.title || 'Untitled'}</h3>
-                <p>${item.content || ''}</p>
-                <div class="news-meta">
+    feedContainer.innerHTML = articles.map(item => {
+        // Split comma-separated image URLs
+        const images = item.image_url ? item.image_url.split(',') : [];
+        const mainImage = images[0] || '';
+        const extraImages = images.slice(1);
+
+        return `
+            <div class="news-card" style="background:#fff; border:1px solid #e5e7eb; border-radius:10px; overflow:hidden; margin-bottom:25px; padding:20px;">
+                ${mainImage ? `<img src="${mainImage}" style="width:100%; max-height:350px; object-fit:cover; border-radius:8px; margin-bottom:15px;">` : ''}
+                
+                <h3 style="font-size:1.2rem; font-weight:700; margin-bottom:10px;">${item.title || 'Untitled'}</h3>
+                <p style="font-size:0.95rem; color:#374151; line-height:1.6; margin-bottom:15px;">${item.content || ''}</p>
+                
+                ${extraImages.length > 0 ? `
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:10px; margin-bottom:15px;">
+                        ${extraImages.map(img => `<img src="${img}" style="width:100%; height:100px; object-fit:cover; border-radius:6px;">`).join('')}
+                    </div>
+                ` : ''}
+
+                <div style="font-size:0.75rem; color:#9ca3af; font-weight:500;">
                     By <strong>${item.author || 'Anonymous'}</strong> • ${item.created_at ? new Date(item.created_at).toLocaleDateString() : 'Just now'}
                 </div>
             </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 document.addEventListener('DOMContentLoaded', loadArticles);
