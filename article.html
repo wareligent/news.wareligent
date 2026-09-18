@@ -180,7 +180,7 @@
         list.innerHTML = comments.map(c => `
             <div class="comment-item">
                 <strong>${c.user_name || 'Anonymous'}</strong>
-                <p>${c.comment_text || c.content || ''}</p>
+                <p>${c.comment_text || c.content || c.comment || ''}</p>
             </div>
         `).join('');
     }
@@ -194,12 +194,33 @@
 
         const userName = session.user.user_metadata?.full_name || session.user.email || 'User';
 
-        const { error } = await supabaseClient.from('comments').insert([{
+        // ১. প্রথম চেষ্টা: স্ট্যান্ডার্ড schema
+        let { error } = await supabaseClient.from('comments').insert([{
             article_id: parseInt(articleId),
             user_id: session.user.id,
             user_name: userName,
             comment_text: text
         }]);
+
+        // ২. যদি user_id কলাম না থাকে, user_id বাদ দিয়ে চেষ্টা
+        if (error && error.message.includes('user_id')) {
+            const res = await supabaseClient.from('comments').insert([{
+                article_id: parseInt(articleId),
+                user_name: userName,
+                comment_text: text
+            }]);
+            error = res.error;
+        }
+
+        // ৩. যদি comment_text কলাম না থাকে, content কলামে চেষ্টা
+        if (error && error.message.includes('comment_text')) {
+            const res = await supabaseClient.from('comments').insert([{
+                article_id: parseInt(articleId),
+                user_name: userName,
+                content: text
+            }]);
+            error = res.error;
+        }
 
         if (error) {
             console.error("Comment Error:", error);
