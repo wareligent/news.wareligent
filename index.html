@@ -186,9 +186,11 @@
         async function loadArticles() {
             const feedContainer = document.getElementById('news-feed');
 
+            // .neq('status', 'held') যুক্ত করে হোল্ডে থাকা আর্টিকেলে ফিল্টার বসানো হয়েছে
             const { data: articles, error } = await supabaseClient
                 .from('articles')
                 .select('*')
+                .neq('status', 'held')
                 .order('created_at', { ascending: false });
 
             if (error) {
