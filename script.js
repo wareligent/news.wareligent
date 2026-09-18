@@ -1,173 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Publish | Wareligent</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --accent: #f97316;
-            --accent-hover: #ea580c;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --danger: #ef4444;
-        }
+const SUPABASE_URL = 'https://xveccsbdrysuiwyuvodw.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_HkyRE170ylT0kkdZxbwUSQ_ihHrS_Ra';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text-main); display: flex; justify-content: center; padding: 40px 15px; }
+async function loadArticles() {
+    const feedContainer = document.getElementById('news-feed');
+    if (!feedContainer) return;
 
-        .container { width: 100%; max-width: 580px; background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.03); padding: 32px; }
-        
-        .header { margin-bottom: 28px; }
-        .header h2 { font-size: 1.5rem; font-weight: 700; color: var(--text-main); }
-        .header p { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+    const { data: articles, error } = await supabaseClient
+        .from('articles')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-        .form-group { margin-bottom: 20px; }
-        label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); display: block; margin-bottom: 8px; }
+    if (error) {
+        console.error('Supabase Error:', error);
+        feedContainer.innerHTML = '<p style="color: red;">Error loading articles.</p>';
+        return;
+    }
 
-        input, textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #fff; color: var(--text-main); transition: border-color 0.2s; outline: none; }
-        input:focus, textarea:focus { border-color: var(--accent); }
+    if (!articles || articles.length === 0) {
+        feedContainer.innerHTML = '<p style="color:#64748b;">No articles published yet. Click "Submit Article" to write one!</p>';
+        return;
+    }
 
-        .image-input-container { display: flex; flex-direction: column; gap: 10px; }
-        
-        .input-row { display: flex; gap: 8px; align-items: center; }
-        .btn-remove { background: #fef2f2; border: 1px solid #fca5a5; color: var(--danger); padding: 12px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
-        .btn-remove:hover { background: #fee2e2; }
+    feedContainer.innerHTML = articles.map(item => {
+        const images = item.image_url ? item.image_url.split(',') : [];
+        const mainImage = images[0] || '';
+        const extraImages = images.slice(1);
 
-        .btn-add-img { background: transparent; border: 1px dashed var(--accent); color: var(--accent); width: 100%; padding: 10px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 8px; transition: background 0.2s; }
-        .btn-add-img:hover { background: #fff7ed; }
+        return `
+            <article style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; margin-bottom:24px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                ${mainImage ? `<img src="${mainImage}" style="width:100%; max-height:380px; object-fit:cover; display:block;">` : ''}
+                
+                <div style="padding:24px;">
+                    <h2 style="font-size:1.25rem; font-weight:700; color:#0f172a; margin-bottom:10px; line-height:1.4;">${item.title || 'Untitled'}</h2>
+                    <p style="font-size:0.92rem; color:#334155; line-height:1.6; margin-bottom:16px;">${item.content || ''}</p>
+                    
+                    ${extraImages.length > 0 ? `
+                        <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap:8px; margin-bottom:16px;">
+                            ${extraImages.map(img => `<img src="${img}" style="width:100%; height:90px; object-fit:cover; border-radius:6px; border:1px solid #e2e8f0;">`).join('')}
+                        </div>
+                    ` : ''}
 
-        .hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; }
-        .hint a { color: var(--accent); text-decoration: none; font-weight: 500; }
-
-        .btn-submit { width: 100%; background: var(--accent); color: #fff; border: none; padding: 14px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; margin-top: 10px; transition: background 0.2s; }
-        .btn-submit:hover { background: var(--accent-hover); }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <div class="header">
-            <h2>Publish Article</h2>
-            <p>Share news and knowledge with the global community</p>
-        </div>
-
-        <form id="postForm">
-            <div class="form-group">
-                <label>Author</label>
-                <input type="text" id="author" placeholder="John Doe" required>
-            </div>
-
-            <div class="form-group">
-                <label>Title</label>
-                <input type="text" id="title" placeholder="Enter headline..." required>
-            </div>
-
-            <div class="form-group">
-                <label>Images (Max 7)</label>
-                <div class="image-input-container" id="imageFields">
-                    <div class="input-row">
-                        <input type="url" class="img-url" placeholder="Main Cover Image URL" required>
+                    <div style="font-size:0.75rem; color:#64748b; border-top:1px solid #f1f5f9; padding-top:12px; display:flex; justify-content:space-between;">
+                        <span>By <strong>${item.author || 'Anonymous'}</strong></span>
+                        <span>${item.created_at ? new Date(item.created_at).toLocaleDateString() : 'Just now'}</span>
                     </div>
                 </div>
-                
-                <button type="button" class="btn-add-img" id="addImgBtn" onclick="addImageInput()">
-                    + Add Another Image
-                </button>
-                
-                <p class="hint">Upload images on <a href="https://imgbb.com" target="_blank">ImgBB</a> and paste direct links here.</p>
-            </div>
+            </article>
+        `;
+    }).join('');
+}
 
-            <div class="form-group">
-                <label>Content</label>
-                <textarea id="content" rows="6" placeholder="Write full article here..." required></textarea>
-            </div>
-
-            <button type="submit" class="btn-submit" id="submitBtn">Publish Article</button>
-        </form>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const SUPABASE_URL = 'https://xveccsbdrysuiwyuvodw.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_HkyRE170ylT0kkdZxbwUSQ_ihHrS_Ra';
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        let imageCount = 1;
-
-        function addImageInput() {
-            if (imageCount >= 7) {
-                alert("Maximum 7 images allowed.");
-                return;
-            }
-            imageCount++;
-            const container = document.getElementById('imageFields');
-            
-            const row = document.createElement('div');
-            row.className = 'input-row';
-            
-            const newInput = document.createElement('input');
-            newInput.type = 'url';
-            newInput.className = 'img-url';
-            newInput.placeholder = `Image ${imageCount} URL`;
-
-            const removeBtn = document.createElement('button');
-            removeBtn.type = 'button';
-            removeBtn.className = 'btn-remove';
-            removeBtn.innerText = 'Remove';
-            removeBtn.onclick = function() {
-                row.remove();
-                imageCount--;
-                document.getElementById('addImgBtn').style.display = 'flex';
-            };
-
-            row.appendChild(newInput);
-            row.appendChild(removeBtn);
-            container.appendChild(row);
-
-            if (imageCount === 7) {
-                document.getElementById('addImgBtn').style.display = 'none';
-            }
-        }
-
-        document.getElementById('postForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            btn.innerText = 'Publishing...';
-            btn.disabled = true;
-
-            const inputs = document.querySelectorAll('.img-url');
-            const imagesList = [];
-            inputs.forEach(input => {
-                if (input.value.trim() !== '') {
-                    imagesList.push(input.value.trim());
-                }
-            });
-
-            const author = document.getElementById('author').value;
-            const title = document.getElementById('title').value;
-            const content = document.getElementById('content').value;
-
-            const { error } = await supabaseClient.from('articles').insert([{ 
-                author, 
-                title, 
-                image_url: imagesList.join(','), 
-                content 
-            }]);
-
-            if (error) {
-                alert('Error: ' + error.message);
-                btn.innerText = 'Publish Article';
-                btn.disabled = false;
-            } else {
-                alert('Article published successfully!');
-                window.location.href = 'index.html';
-            }
-        });
-    </script>
-</body>
-</html>
+document.addEventListener('DOMContentLoaded', loadArticles);
