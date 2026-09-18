@@ -66,6 +66,13 @@
                 <input type="text" id="title" placeholder="Enter headline..." required>
             </div>
 
+            <!-- SEO Tags Field -->
+            <div class="form-group">
+                <label>Tags / Keywords (SEO)</label>
+                <input type="text" id="tags" placeholder="e.g. apple, macbook, tech, gadget">
+                <p class="hint">Separate keywords with commas. Helps Google & Bing index your article.</p>
+            </div>
+
             <div class="form-group">
                 <label>Images (Max 7)</label>
                 <div class="image-input-container" id="imageFields">
@@ -98,7 +105,6 @@
 
         let currentUser = null;
 
-        // Check user session
         async function checkAuth() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (!session) {
@@ -170,11 +176,13 @@
 
             const author = currentUser.user_metadata.full_name || currentUser.email;
             const title = document.getElementById('title').value;
+            const tags = document.getElementById('tags').value;
             const content = document.getElementById('content').value;
 
             const { error } = await supabaseClient.from('articles').insert([{ 
                 author, 
                 title, 
+                tags,
                 image_url: imagesList.join(','), 
                 content 
             }]);
