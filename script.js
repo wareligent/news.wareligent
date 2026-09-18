@@ -18,33 +18,35 @@ async function loadArticles() {
     }
 
     if (!articles || articles.length === 0) {
-        feedContainer.innerHTML = '<p style="color:#6b7280;">No articles published yet. Click "Submit Article" to publish the first one!</p>';
+        feedContainer.innerHTML = '<p style="color:#64748b;">No articles published yet. Click "Submit Article" to write one!</p>';
         return;
     }
 
     feedContainer.innerHTML = articles.map(item => {
-        // Split comma-separated image URLs
         const images = item.image_url ? item.image_url.split(',') : [];
         const mainImage = images[0] || '';
         const extraImages = images.slice(1);
 
         return `
-            <div class="news-card" style="background:#fff; border:1px solid #e5e7eb; border-radius:10px; overflow:hidden; margin-bottom:25px; padding:20px;">
-                ${mainImage ? `<img src="${mainImage}" style="width:100%; max-height:350px; object-fit:cover; border-radius:8px; margin-bottom:15px;">` : ''}
+            <article style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; margin-bottom:24px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                ${mainImage ? `<img src="${mainImage}" style="width:100%; max-height:380px; object-fit:cover; display:block;">` : ''}
                 
-                <h3 style="font-size:1.2rem; font-weight:700; margin-bottom:10px;">${item.title || 'Untitled'}</h3>
-                <p style="font-size:0.95rem; color:#374151; line-height:1.6; margin-bottom:15px;">${item.content || ''}</p>
-                
-                ${extraImages.length > 0 ? `
-                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:10px; margin-bottom:15px;">
-                        ${extraImages.map(img => `<img src="${img}" style="width:100%; height:100px; object-fit:cover; border-radius:6px;">`).join('')}
-                    </div>
-                ` : ''}
+                <div style="padding:24px;">
+                    <h2 style="font-size:1.25rem; font-weight:700; color:#0f172a; margin-bottom:10px; line-height:1.4;">${item.title || 'Untitled'}</h2>
+                    <p style="font-size:0.92rem; color:#334155; line-height:1.6; margin-bottom:16px;">${item.content || ''}</p>
+                    
+                    ${extraImages.length > 0 ? `
+                        <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap:8px; margin-bottom:16px;">
+                            ${extraImages.map(img => `<img src="${img}" style="width:100%; height:90px; object-fit:cover; border-radius:6px; border:1px solid #e2e8f0;">`).join('')}
+                        </div>
+                    ` : ''}
 
-                <div style="font-size:0.75rem; color:#9ca3af; font-weight:500;">
-                    By <strong>${item.author || 'Anonymous'}</strong> • ${item.created_at ? new Date(item.created_at).toLocaleDateString() : 'Just now'}
+                    <div style="font-size:0.75rem; color:#64748b; border-top:1px solid #f1f5f9; padding-top:12px; display:flex; justify-content:space-between;">
+                        <span>By <strong>${item.author || 'Anonymous'}</strong></span>
+                        <span>${item.created_at ? new Date(item.created_at).toLocaleDateString() : 'Just now'}</span>
+                    </div>
                 </div>
-            </div>
+            </article>
         `;
     }).join('');
 }
