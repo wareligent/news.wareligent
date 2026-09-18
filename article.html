@@ -3,141 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Dynamic SEO Placeholder Tags -->
-    <title id="seoTitle">Wareligent Article</title>
-    <meta name="description" id="seoDesc" content="Read the latest tech news and updates on Wareligent.">
-    <meta name="keywords" id="seoKeywords" content="tech, news, wareligent">
-
-    <!-- Open Graph (Facebook / LinkedIn / Twitter Previews) -->
-    <meta property="og:title" id="ogTitle" content="Wareligent">
-    <meta property="og:description" id="ogDesc" content="Tech News and Updates">
-    <meta property="og:image" id="ogImage" content="">
-    <meta property="og:type" content="article">
-
+    <title>Article Detail | Wareligent</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg: #ffffff;
-            --accent: #f97316;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text-main); line-height: 1.7; padding: 40px 15px; }
-
-        .article-container { max-width: 800px; margin: 0 auto; }
+        body { font-family: 'Inter', sans-serif; background: #f8f9fa; color: #111827; padding: 20px 15px; }
+        .container { max-width: 700px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 12px; border: 1px solid #e5e7eb; }
+        .back-btn { text-decoration: none; color: #f97316; font-weight: 600; font-size: 0.85rem; }
+        h1 { font-size: 1.6rem; margin: 15px 0 10px 0; }
+        .meta { color: #6b7280; font-size: 0.85rem; margin-bottom: 20px; }
+        .cover-img { width: 100%; max-height: 350px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; }
+        .content { line-height: 1.6; font-size: 0.95rem; margin-bottom: 30px; }
         
-        .article-title { font-size: 2.2rem; font-weight: 700; margin-bottom: 12px; line-height: 1.25; }
-        .meta { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px; display: flex; gap: 15px; align-items: center; }
-        
-        /* Tags Chips UI */
-        .tags-wrapper { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
-        .tag-chip { background: #f1f5f9; color: var(--text-muted); padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 500; text-transform: lowercase; }
+        .action-bar { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; padding: 12px 0; margin-bottom: 30px; }
+        .btn-action { background: #f3f4f6; border: none; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+        .btn-action:hover { background: #e5e7eb; }
+        .btn-report { background: #fef2f2; color: #ef4444; border: 1px solid #fca5a5; }
 
-        /* Multi-Image Gallery */
-        .gallery { display: flex; flex-direction: column; gap: 16px; margin-bottom: 28px; }
-        .gallery img { width: 100%; max-height: 480px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border); }
-
-        .content { font-size: 1.1rem; color: #334155; white-space: pre-line; }
-
-        .back-btn { display: inline-block; margin-bottom: 20px; color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+        .comments-section h3 { font-size: 1.1rem; margin-bottom: 15px; }
+        .comment-input-box { display: flex; gap: 10px; margin-bottom: 20px; }
+        .comment-input-box input { flex: 1; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; font-family: inherit; }
+        .comment-input-box button { background: #f97316; color: #fff; border: none; padding: 10px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .comment-item { background: #f9fafb; border: 1px solid #f3f4f6; padding: 12px; border-radius: 8px; margin-bottom: 10px; }
+        .comment-item strong { font-size: 0.85rem; display: block; margin-bottom: 4px; }
+        .comment-item p { font-size: 0.9rem; color: #374151; }
     </style>
 </head>
 <body>
 
-    <div class="article-container">
-        <a href="index.html" class="back-btn">← Back to Home</a>
-        
-        <h1 class="article-title" id="articleTitle">Loading title...</h1>
-        
-        <div class="meta">
-            <span id="articleAuthor">By Wareligent</span> • 
-            <span id="articleDate">Date</span>
-        </div>
+<div class="container">
+    <a href="index.html" class="back-btn">← Back to Articles</a>
+    <div id="articleContainer">Loading article...</div>
+</div>
 
-        <div class="tags-wrapper" id="tagsContainer"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const SUPABASE_URL = 'https://xveccsbdrysuiwyuvodw.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_HkyRE170ylT0kkdZxbwUSQ_ihHrS_Ra';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        <div class="gallery" id="imageGallery"></div>
+    const urlParams = new URLSearchParams(window.location.search);
+    const articleId = urlParams.get('id');
 
-        <div class="content" id="articleContent">Loading article content...</div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const SUPABASE_URL = 'https://xveccsbdrysuiwyuvodw.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_HkyRE170ylT0kkdZxbwUSQ_ihHrS_Ra';
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const articleId = urlParams.get('id');
-
-        async function fetchArticle() {
-            if (!articleId) {
-                document.getElementById('articleTitle').innerText = "Article not found!";
-                return;
-            }
-
-            const { data: article, error } = await supabaseClient
-                .from('articles')
-                .select('*')
-                .eq('id', articleId)
-                .single();
-
-            if (error || !article) {
-                document.getElementById('articleTitle').innerText = "Article not found!";
-                return;
-            }
-
-            // Set Content on Page
-            document.getElementById('articleTitle').innerText = article.title;
-            document.getElementById('articleAuthor').innerText = `By ${article.author || 'Wareligent'}`;
-            document.getElementById('articleDate').innerText = new Date(article.created_at).toLocaleDateString('en-US', {
-                year: 'numeric', month: 'short', day: 'numeric'
-            });
-            document.getElementById('articleContent').innerText = article.content;
-
-            // Set Dynamic SEO Meta Tags
-            document.title = `${article.title} | Wareligent`;
-            document.getElementById('seoTitle').innerText = article.title;
-            document.getElementById('seoDesc').setAttribute('content', article.content.substring(0, 160) + '...');
-            document.getElementById('ogTitle').setAttribute('content', article.title);
-            document.getElementById('ogDesc').setAttribute('content', article.content.substring(0, 160) + '...');
-
-            if (article.tags) {
-                document.getElementById('seoKeywords').setAttribute('content', article.tags);
-                
-                // Display Tags in UI
-                const tagsArr = article.tags.split(',');
-                const tagsContainer = document.getElementById('tagsContainer');
-                tagsArr.forEach(tag => {
-                    if (tag.trim() !== '') {
-                        const chip = document.createElement('span');
-                        chip.className = 'tag-chip';
-                        chip.innerText = `#${tag.trim()}`;
-                        tagsContainer.appendChild(chip);
-                    }
-                });
-            }
-
-            // Render Images Gallery
-            const gallery = document.getElementById('imageGallery');
-            if (article.image_url) {
-                const images = article.image_url.split(',');
-                document.getElementById('ogImage').setAttribute('content', images[0]); // Set 1st image for social previews
-                
-                images.forEach((url, index) => {
-                    const img = document.createElement('img');
-                    img.src = url.trim();
-                    img.alt = `${article.title} image ${index + 1}`;
-                    gallery.appendChild(img);
-                });
-            }
+    async function loadArticleDetail() {
+        if (!articleId) {
+            document.getElementById('articleContainer').innerHTML = "<p>Invalid Article ID.</p>";
+            return;
         }
 
-        fetchArticle();
-    </script>
+        const { data: article, error } = await supabaseClient
+            .from('articles')
+            .select('*')
+            .eq('id', articleId)
+            .single();
+
+        if (error || !article || article.status === 'held') {
+            document.getElementById('articleContainer').innerHTML = `
+                <h2 style="color:#ef4444; margin-top:20px;">Article Unavailable</h2>
+                <p style="color:#6b7280;">This post is under review due to multiple user reports or does not exist.</p>
+            `;
+            return;
+        }
+
+        const img = article.image_url ? article.image_url.split(',')[0] : 'https://via.placeholder.com/700x350';
+
+        document.getElementById('articleContainer').innerHTML = `
+            <h1>${article.title || 'Untitled'}</h1>
+            <div class="meta">By <strong>${article.author || 'Unknown'}</strong> • ${new Date(article.created_at).toLocaleDateString()}</div>
+            <img src="${img}" class="cover-img">
+            <div class="content">${article.content || ''}</div>
+
+            <div class="action-bar">
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-action" onclick="toggleReaction('like')"><i class="fa-regular fa-thumbs-up"></i> <span id="likeCount">0</span></button>
+                    <button class="btn-action" onclick="toggleReaction('dislike')"><i class="fa-regular fa-thumbs-down"></i> <span id="dislikeCount">0</span></button>
+                </div>
+                <button class="btn-action btn-report" onclick="reportArticle()"><i class="fa-solid fa-flag"></i> Report</button>
+            </div>
+
+            <div class="comments-section">
+                <h3>Discussion</h3>
+                <div class="comment-input-box">
+                    <input type="text" id="commentText" placeholder="Write a comment...">
+                    <button onclick="postComment()">Comment</button>
+                </div>
+                <div id="commentsList">Loading comments...</div>
+            </div>
+        `;
+
+        loadReactions();
+        loadComments();
+    }
+
+    async function loadReactions() {
+        const { data } = await supabaseClient.from('article_reactions').select('type').eq('article_id', articleId);
+        if (data) {
+            document.getElementById('likeCount').innerText = data.filter(r => r.type === 'like').length;
+            document.getElementById('dislikeCount').innerText = data.filter(r => r.type === 'dislike').length;
+        }
+    }
+
+    async function toggleReaction(type) {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) return alert("Please log in to react!");
+
+        await supabaseClient.from('article_reactions').upsert({
+            article_id: articleId,
+            user_id: session.user.id,
+            type: type
+        }, { onConflict: 'article_id,user_id' });
+
+        loadReactions();
+    }
+
+    async function reportArticle() {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) return alert("Please log in to report!");
+
+        const reason = prompt("Why are you reporting this article? (e.g. Hate Speech, Fake News)");
+        if (!reason) return;
+
+        const { error } = await supabaseClient.from('reports').insert([{
+            article_id: articleId,
+            user_id: session.user.id,
+            reason: reason
+        }]);
+
+        if (error) {
+            alert("You have already reported this post.");
+        } else {
+            alert("Report submitted.");
+            const { data: reports } = await supabaseClient.from('reports').select('id').eq('article_id', articleId);
+            const count = reports ? reports.length : 0;
+
+            if (count >= 5) {
+                await supabaseClient.from('articles').update({ status: 'held', report_count: count }).eq('id', articleId);
+                alert("This article has been placed on hold due to multiple reports.");
+                window.location.reload();
+            } else {
+                await supabaseClient.from('articles').update({ report_count: count }).eq('id', articleId);
+            }
+        }
+    }
+
+    async function loadComments() {
+        const { data: comments } = await supabaseClient.from('comments').select('*').eq('article_id', articleId).order('created_at', { ascending: false });
+        const list = document.getElementById('commentsList');
+        if (!comments || comments.length === 0) {
+            list.innerHTML = `<p style="color:#9ca3af; font-size:0.85rem;">No comments yet.</p>`;
+            return;
+        }
+        list.innerHTML = comments.map(c => `
+            <div class="comment-item">
+                <strong>${c.user_name || 'Anonymous'}</strong>
+                <p>${c.comment_text}</p>
+            </div>
+        `).join('');
+    }
+
+    async function postComment() {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) return alert("Please log in to comment!");
+
+        const text = document.getElementById('commentText').value.trim();
+        if (!text) return;
+
+        await supabaseClient.from('comments').insert([{
+            article_id: articleId,
+            user_id: session.user.id,
+            user_name: session.user.user_metadata.full_name || session.user.email,
+            comment_text: text
+        }]);
+
+        document.getElementById('commentText').value = '';
+        loadComments();
+    }
+
+    loadArticleDetail();
+</script>
 </body>
 </html>
