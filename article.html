@@ -58,7 +58,7 @@
         const { data: article, error } = await supabaseClient
             .from('articles')
             .select('*')
-            .eq('id', articleId)
+            .eq('id', parseInt(articleId))
             .single();
 
         if (error || !article || article.status === 'held') {
@@ -100,7 +100,7 @@
     }
 
     async function loadReactions() {
-        const { data } = await supabaseClient.from('article_reactions').select('type').eq('article_id', articleId);
+        const { data } = await supabaseClient.from('article_reactions').select('type').eq('article_id', parseInt(articleId));
         if (data) {
             document.getElementById('likeCount').innerText = data.filter(r => r.type === 'like').length;
             document.getElementById('dislikeCount').innerText = data.filter(r => r.type === 'dislike').length;
@@ -111,13 +111,18 @@
         const { data: { session } } = await supabaseClient.auth.getSession();
         if (!session) return alert("Please log in to react!");
 
-        await supabaseClient.from('article_reactions').upsert({
-            article_id: articleId,
+        const { error } = await supabaseClient.from('article_reactions').upsert({
+            article_id: parseInt(articleId),
             user_id: session.user.id,
             type: type
         }, { onConflict: 'article_id,user_id' });
 
-        loadReactions();
+        if (error) {
+            console.error("Reaction Error:", error);
+            alert("Error: " + error.message);
+        } else {
+            loadReactions();
+        }
     }
 
     async function reportArticle() {
@@ -128,7 +133,7 @@
         if (!reason) return;
 
         const { error } = await supabaseClient.from('reports').insert([{
-            article_id: articleId,
+            article_id: parseInt(articleId),
             user_id: session.user.id,
             reason: reason
         }]);
@@ -137,30 +142,45 @@
             alert("You have already reported this post.");
         } else {
             alert("Report submitted.");
-            const { data: reports } = await supabaseClient.from('reports').select('id').eq('article_id', articleId);
+            const { data: reports } = await supabaseClient.from('reports').select('id').eq('article_id', parseInt(articleId));
             const count = reports ? reports.length : 0;
 
             if (count >= 5) {
-                await supabaseClient.from('articles').update({ status: 'held', report_count: count }).eq('id', articleId);
+                await supabaseClient.from('articles').update({ status: 'held', report_count: count }).eq('id', parseInt(articleId));
                 alert("This article has been placed on hold due to multiple reports.");
                 window.location.reload();
             } else {
-                await supabaseClient.from('articles').update({ report_count: count }).eq('id', articleId);
+                await supabaseClient.from('articles').update({ report_count: count }).eq('id', parseInt(articleId));
             }
         }
     }
 
     async function loadComments() {
-        const { data: comments } = await supabaseClient.from('comments').select('*').eq('article_id', articleId).order('created_at', { ascending: false });
+        if (!articleId) return;
+
+        const { data: comments, error } = await supabaseClient
+            .from('comments')
+            .select('*')
+            .eq('article_id', parseInt(articleId))
+            .order('created_at', { ascending: false });
+
         const list = document.getElementById('commentsList');
+
+        if (error) {
+            console.error("Error loading comments:", error);
+            list.innerHTML = `<p style="color:red; font-size:0.85rem;">Error loading comments: ${error.message}</p>`;
+            return;
+        }
+
         if (!comments || comments.length === 0) {
             list.innerHTML = `<p style="color:#9ca3af; font-size:0.85rem;">No comments yet.</p>`;
             return;
         }
+
         list.innerHTML = comments.map(c => `
             <div class="comment-item">
                 <strong>${c.user_name || 'Anonymous'}</strong>
-                <p>${c.comment_text}</p>
+                <p>${c.comment_text || c.content || ''}</p>
             </div>
         `).join('');
     }
@@ -172,15 +192,22 @@
         const text = document.getElementById('commentText').value.trim();
         if (!text) return;
 
-        await supabaseClient.from('comments').insert([{
-            article_id: articleId,
+        const userName = session.user.user_metadata?.full_name || session.user.email || 'User';
+
+        const { error } = await supabaseClient.from('comments').insert([{
+            article_id: parseInt(articleId),
             user_id: session.user.id,
-            user_name: session.user.user_metadata.full_name || session.user.email,
+            user_name: userName,
             comment_text: text
         }]);
 
-        document.getElementById('commentText').value = '';
-        loadComments();
+        if (error) {
+            console.error("Comment Error:", error);
+            alert("Error posting comment: " + error.message);
+        } else {
+            document.getElementById('commentText').value = '';
+            loadComments();
+        }
     }
 
     loadArticleDetail();
