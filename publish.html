@@ -14,6 +14,7 @@
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
+            --danger: #ef4444;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,6 +34,10 @@
 
         .image-input-container { display: flex; flex-direction: column; gap: 10px; }
         
+        .input-row { display: flex; gap: 8px; align-items: center; }
+        .btn-remove { background: #fef2f2; border: 1px solid #fca5a5; color: var(--danger); padding: 12px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
+        .btn-remove:hover { background: #fee2e2; }
+
         .btn-add-img { background: transparent; border: 1px dashed var(--accent); color: var(--accent); width: 100%; padding: 10px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 8px; transition: background 0.2s; }
         .btn-add-img:hover { background: #fff7ed; }
 
@@ -65,7 +70,9 @@
             <div class="form-group">
                 <label>Images (Max 7)</label>
                 <div class="image-input-container" id="imageFields">
-                    <input type="url" class="img-url" placeholder="Main Cover Image URL" required>
+                    <div class="input-row">
+                        <input type="url" class="img-url" placeholder="Main Cover Image URL" required>
+                    </div>
                 </div>
                 
                 <button type="button" class="btn-add-img" id="addImgBtn" onclick="addImageInput()">
@@ -99,11 +106,28 @@
             }
             imageCount++;
             const container = document.getElementById('imageFields');
+            
+            const row = document.createElement('div');
+            row.className = 'input-row';
+            
             const newInput = document.createElement('input');
             newInput.type = 'url';
             newInput.className = 'img-url';
             newInput.placeholder = `Image ${imageCount} URL`;
-            container.appendChild(newInput);
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'btn-remove';
+            removeBtn.innerText = 'Remove';
+            removeBtn.onclick = function() {
+                row.remove();
+                imageCount--;
+                document.getElementById('addImgBtn').style.display = 'flex';
+            };
+
+            row.appendChild(newInput);
+            row.appendChild(removeBtn);
+            container.appendChild(row);
 
             if (imageCount === 7) {
                 document.getElementById('addImgBtn').style.display = 'none';
